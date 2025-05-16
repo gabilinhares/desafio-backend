@@ -60,15 +60,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # <- ADICIONADO
     'django.contrib.messages.middleware.MessageMiddleware',  # <- ADICIONADO
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'  # Diretório onde os arquivos estáticos serão servidos
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Substitua com o caminho real se necessário
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Diretório onde os arquivos estáticos serão coletados
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 DATABASES = {
     'default': {
