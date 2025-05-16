@@ -1,5 +1,3 @@
-# wallet_api/views.py
-
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions
@@ -11,10 +9,14 @@ from .models import Wallet, Transaction
 from .serializers import WalletSerializer, TransactionSerializer, UserSerializer
 from .serializers import EmailTokenObtainPairSerializer  # seu serializer custom
 
-
 User = get_user_model()
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento dos usuários.
+    - Ação 'create' é aberta para registro.
+    - Outras ações exigem autenticação.
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -24,6 +26,10 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
 class WalletViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento das carteiras digitais.
+    - Permite somente o acesso e manipulação das carteiras do usuário autenticado.
+    """
     queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
     permission_classes = [IsAuthenticated]
@@ -35,6 +41,11 @@ class WalletViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 class TransactionViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gerenciamento das transações financeiras entre carteiras.
+    - Permite apenas transações onde o usuário é remetente ou destinatário.
+    - Valida saldo antes de executar a transação.
+    """
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
@@ -65,12 +76,20 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         serializer.save()
 
-    def index(request):
-        return HttpResponse("API de Carteira funcionando!")
+def index(request):
+    """
+    Página inicial simples para validar que a API está rodando.
+    """
+    return HttpResponse("API de Carteira funcionando!")
 
 class EmailTokenObtainPairView(TokenObtainPairView):
+    """
+    View para autenticação via JWT usando email e senha.
+    """
     serializer_class = EmailTokenObtainPairSerializer
 
-
 class EmailLoginView(TokenObtainPairView):
+    """
+    View alternativa para autenticação via JWT com email.
+    """
     serializer_class = EmailTokenObtainPairSerializer

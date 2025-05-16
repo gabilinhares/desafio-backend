@@ -2,46 +2,44 @@
 
 Este projeto é uma API RESTful desenvolvida com Django e Django REST Framework, com autenticação via JWT, para gerenciamento de carteiras digitais e transações financeiras entre usuários.
 
+---
+
 ## 🔧 Tecnologias Utilizadas
 
-- Python 3.11
-- Django 5.2.1
-- Django REST Framework
-- Simple JWT (autenticação)
-- drf-yasg (Swagger)
-- SQLite (padrão para testes locais)
-- Git + GitHub
+- Python 3.11  
+- Django 5.2.1  
+- Django REST Framework  
+- Simple JWT (autenticação)  
+- drf-yasg (Swagger UI)  
+- PostgreSQL (produção) / SQLite (teste local)  
+- Git + GitHub  
+
+---
 
 ## 🚀 Funcionalidades
 
-- ✅ Cadastro de usuários com senha criptografada
-- ✅ Criação e gerenciamento de carteiras por usuário
-- ✅ Realização de transações entre carteiras (débito/crédito)
-- ✅ Listagem de transações
-- ✅ Autenticação via JWT (token/refresh)
-- ✅ Documentação Swagger disponível na rota `/swagger/`
+- ✅ Cadastro de usuários com senha criptografada  
+- ✅ Criação e gerenciamento de carteiras por usuário  
+- ✅ Realização de transações entre carteiras (débito/crédito)  
+- ✅ Listagem de transações  
+- ✅ Autenticação via JWT (token/refresh) com login por email  
+- ✅ Documentação Swagger disponível na rota `/swagger/`  
 
-## 🔐 Autenticação
+---
 
-A autenticação é feita com JWT. Use as rotas:
+## ⚙️ Como rodar localmente
 
-- `POST /token/` – para obter o token
-- `POST /token/refresh/` – para atualizar o token
-
-Inclua o token no cabeçalho das requisições autenticadas:
-
-```http
-Authorization: Bearer <seu_token_aqui>
-
+```bash
 # Clone o projeto
 git clone git@github.com:gabilinhares/desafio-backend.git
 cd desafio-backend
 
-# Crie o ambiente virtual
+# Crie e ative o ambiente virtual
 python -m venv venv
-source venv/Scripts/activate  # no Windows
-# ou
-source venv/bin/activate  # no Linux/macOS
+# Windows
+venv\Scripts\activate
+# Linux/macOS
+source venv/bin/activate
 
 # Instale as dependências
 pip install -r requirements.txt
@@ -52,40 +50,44 @@ python manage.py migrate
 # Rode o servidor
 python manage.py runserver
 
-📄 Documentação
+Acesse em: http://127.0.0.1:8000
+
+Autenticação via JWT com login por email
+A API utiliza autenticação JWT e permite login usando email e senha, com emissão de tokens de acesso e refresh.
+
+Endpoints para autenticação
+POST /api/token/
+Solicitação para obter tokens JWT. Envie JSON no corpo com email e senha:
+
+{
+  "email": "usuario@example.com",
+  "password": "sua_senha"
+}
+
+POST /api/token/refresh/
+Atualiza o token de acesso enviando o token de refresh:
+
+{
+  "refresh": "seu_token_refresh"
+}
+
+Usando o token nas requisições autenticadas
+Inclua o token JWT no cabeçalho Authorization:
+
+Authorization: Bearer <seu_token_aqui>
+
+ Documentação da API
 Swagger UI: /swagger/
 
 Redoc: /redoc/
 
-⚙️ Como rodar localmente
-
-# Clone o projeto
-git clone git@github.com:gabilinhares/desafio-backend.git
-cd desafio-backend
-
-# Crie o ambiente virtual
-python -m venv venv
-source venv/Scripts/activate  # no Windows
-# ou
-source venv/bin/activate  # no Linux/macOS
-
-# Instale as dependências
-pip install -r requirements.txt
-
-# Execute as migrações
-python manage.py migrate
-
-# Rode o servidor
-python manage.py runserver
-Acesse em: http://127.0.0.1:8000
-
 🚀 Deploy no Render
-1. Crie o projeto no Render
-Vá em New → Web Service
+Crie o Web Service no Render acessando New → Web Service
 
-Conecte seu GitHub e selecione o repositório
+Conecte seu repositório GitHub e selecione o repositório do projeto
 
-2. Configure os campos:
+Configure os campos:
+
 Name: desafio-backend
 
 Build Command: pip install -r requirements.txt
@@ -94,22 +96,18 @@ Start Command: gunicorn wallet_api.wsgi:application
 
 Environment: Python 3
 
-Runtime: Docker (ou use ambiente padrão)
+Runtime: Docker (ou ambiente padrão)
 
-Environment Variables:
-
+Configure as variáveis de ambiente no painel do Render:
 DJANGO_SETTINGS_MODULE=wallet_api.settings
-
 PYTHON_VERSION=3.11
-
 SECRET_KEY=<sua_secret_key>
-
 DEBUG=False
-
 ALLOWED_HOSTS=*
+DATABASE_URL=<sua_database_url>
 
-3. Faça o deploy
-O Render cuidará do build e do deploy automático a cada git push.
+
+Faça o deploy. O Render cuidará do build e deploy automático a cada push no GitHub.
 
 ✅ Status do Projeto
 🚧 Em desenvolvimento – funcionalidades principais implementadas, testes e deploy em progresso.
@@ -117,5 +115,3 @@ O Render cuidará do build e do deploy automático a cada git push.
 ✨ Autora
 Desenvolvido por Gabi Linhares 💜
 github.com/gabilinhares
-
-
