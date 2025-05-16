@@ -66,13 +66,21 @@ TEMPLATES = [
 ]
 
 # Banco de Dados: usa DATABASE_URL em produção, localmente usa config padrão
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://postgres:714705@localhost:5432/desafio_backend',
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
-}
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ['DATABASE_URL'], conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'desafio_backend',
+            'USER': 'postgres',
+            'PASSWORD': '714705',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Arquivos estáticos
 STATIC_URL = '/static/'
