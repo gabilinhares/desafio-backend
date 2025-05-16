@@ -1,40 +1,52 @@
-# Django settings placeholder
 from pathlib import Path
-
 import os
+import dj_database_url
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'sua-secret-key-segura-local')
+
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
 AUTH_USER_MODEL = 'core.User'
 ROOT_URLCONF = 'wallet_api.urls'
-#ROOT_URLCONF = 'urls_test'
-SECRET_KEY = '4j@(fxmwdbq9qxhwd_7%k4w28%p@b%0q5c-b35%4xyb6j$h2c-'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEBUG = True
-ALLOWED_HOSTS = ['*']
-
 AUTHENTICATION_BACKENDS = [
-    'wallet_api.authentication.EmailBackend',  # Seu backend por email
-    'django.contrib.auth.backends.ModelBackend',  # Fallback padrão (username)
+    'wallet_api.authentication.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
-
-
 INSTALLED_APPS = [
-    'django.contrib.admin',  
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'core',
-    'rest_framework',
-    'rest_framework_simplejwt',
     'wallet_api',
     'wallet',
-    'django_extensions',
+
+    'rest_framework',
+    'rest_framework_simplejwt',
     'drf_spectacular',
     'drf_yasg',
-    # Outros apps...
+    'django_extensions',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise logo após Security
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 TEMPLATES = [
@@ -52,49 +64,32 @@ TEMPLATES = [
         },
     },
 ]
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # <- ADICIONADO
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # <- ADICIONADO
-    'django.contrib.messages.middleware.MessageMiddleware',  # <- ADICIONADO
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Banco de Dados: usa DATABASE_URL em produção, localmente usa config padrão
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://postgres:714705@localhost:5432/desafio_backend',
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
+}
 
-STATIC_URL = '/static/'  # Diretório onde os arquivos estáticos serão servidos
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-
+# Arquivos estáticos
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'desafio_backend',   # Nome que você deu no pgAdmin
-        'USER': 'postgres',           # Ou outro, se você criou um diferente
-        'PASSWORD': '714705',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}  # <-- Fechar dicionário DATABASES aqui
+# WhiteNoise para servir arquivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # Protege toda API por padrão
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
-
-
-
