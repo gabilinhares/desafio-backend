@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'wallet_api',
     'wallet',
     'django_extensions',
-    'drf_spectacular'
+    'drf_spectacular',
+    'drf_yasg',
     # Outros apps...
 ]
 
