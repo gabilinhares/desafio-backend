@@ -20,10 +20,15 @@ class UserTests(APITestCase):
 
     def test_login_with_jwt(self):
         # Criar usuário antes do login
-        User.objects.create_user(
-            username='testuser',
-            email='testuser@example.com',
-            password='testpass123'
+        #User.objects.create_user(
+        #    username='testuser',
+        #    email='testuser@example.com',
+        #    password='testpass123'
+        #)
+        self.user = User.objects.create_user(
+            username='usuario1',
+            email='usuario@example.com',
+            password='senha123'
         )
 
         url = reverse('token_obtain_pair')  # esta é a url que aponta para EmailTokenObtainPairView
@@ -35,3 +40,6 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)
         self.assertIn('refresh', response.data)
+        
+        
+

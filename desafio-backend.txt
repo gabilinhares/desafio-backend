@@ -1,0 +1,70 @@
+Resumo do Desafio Backend - Carteiras Digitais
+Objetivo:
+Criar uma API RESTful usando Django + DRF com autenticação JWT para gerenciar carteiras digitais e transações financeiras entre usuários.
+
+Funcionalidades já implementadas:
+
+Cadastro de usuários (com senha criptografada e login via email).
+
+Autenticação via JWT (token e refresh).
+
+CRUD de carteiras digitais, vinculadas ao usuário autenticado.
+
+Realização de transações entre carteiras (checa saldo, atualiza saldo de ambas as carteiras).
+
+Listagem de transações (filtrada por carteiras do usuário).
+
+Documentação Swagger funcionando em /swagger/.
+
+Deploy configurado e funcionando (Render).
+
+Configurações para ambiente local e produção.
+
+Possíveis requisitos extras para ganhar pontos
+Testes automatizados
+
+Testes unitários e de integração para as views, serializers e models.
+
+Testar autenticação, criação de carteiras, transações, permissões, validações de saldo, etc.
+
+Melhorias na documentação
+
+Adicionar docstrings nos endpoints para melhorar Swagger e geração automática de docs.
+
+Exemplos e descrições mais detalhadas nas serializers e views.
+
+Validações e regras de negócio extras
+
+Bloquear transações com valores negativos ou zero.
+
+Limitar número máximo de carteiras por usuário.
+
+Registrar logs das transações para auditoria.
+
+Melhorias de segurança
+
+Rate limiting para endpoints sensíveis.
+
+Proteção contra CSRF, XSS, etc (se aplicável).
+
+Forçar HTTPS em produção.
+
+Filtragem, paginação e ordenação
+
+Implementar paginação nas listas de transações e carteiras.
+
+Filtrar transações por data, valor, carteira, etc.
+
+Notificações
+
+Enviar emails ou notificações quando uma transação for criada.
+
+Melhorias no deploy
+
+Configurar CI/CD para rodar testes e deploy automático no push.
+
+Melhor experiência API
+
+Adicionar endpoints customizados (ex: saldo consolidado).
+
+Endpoints para extratos e relatórios.
